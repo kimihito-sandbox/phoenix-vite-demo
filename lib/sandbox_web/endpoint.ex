@@ -10,6 +10,15 @@ defmodule SandboxWeb.Endpoint do
     signing_salt: "Pfqv54Ra"
   ]
 
+  unless Vite.is_prod() do
+    # Support serving from assets/public folder directly (only during development)
+    # still keep the "priv/static" pipeline as fallback + for production
+    plug Plug.Static,
+      from: "assets/public",
+      at: "/",
+      only: ~w(images favicon.ico robots.txt)
+  end
+
   socket "/socket", SandboxWeb.UserSocket,
     websocket: true,
     longpoll: false

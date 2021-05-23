@@ -30,6 +30,14 @@ services:
     command: mix phx.server
     ports:
       - 4000:4000
+    depends_on: 
+      - postgres
+      - vite
+  vite:
+    <<: *backend
+    command: npm --prefix assets run dev
+    ports:
+      - 3000:3000
   postgres:
     image: postgres:12
     volumes:
