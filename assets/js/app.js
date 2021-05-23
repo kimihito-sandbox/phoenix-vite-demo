@@ -12,4 +12,5 @@ import "../css/app.scss"
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
+console.log("yay!");
 import "phoenix_html"
