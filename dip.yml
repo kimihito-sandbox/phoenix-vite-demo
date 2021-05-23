@@ -1,0 +1,47 @@
+version: '4.1'
+
+environment:
+  MIX_ENV: dev
+
+compose:
+  files:
+    - docker-compose.yml
+  # specify project name explicitly to avoid name collisions:
+  # docker-compose use the compose file's folder name as the project name by default,
+  # which could be the same for different projects (e.g., if you store docker-compose.yml
+  # in the .dockerdev/ folder)
+  # project_name: my_project_dev
+
+interaction:
+  sh:
+    description: Open a Bash shell within a Phoenix container (with dependencies up)
+    service: runner
+    command: /bin/bash
+
+  bash:
+    description: Run an arbitrary script within a container (or open a shell without deps)
+    service: runner
+    command: /bin/bash
+    compose_run_options: [no-deps]
+
+  mix:
+    description: Run Bundler commands
+    service: runner
+    command: mix
+    compose_run_options: [no-deps]
+
+  iex:
+    service: runner
+    command: iex
+    compose_run_options: [no-deps]
+
+  psql:
+    description: Run psql console
+    service: postgres
+    command: psql -h postgres -U postgres -d sandbox_dev
+
+provision:
+  - dip compose down --volumes
+  - dip compose up -d postgres
+  - dip mix deps.get
+  - dip mix ecto.create
