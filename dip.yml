@@ -43,5 +43,4 @@ interaction:
 provision:
   - dip compose down --volumes
   - dip compose up -d postgres
-  - dip mix deps.get
-  - dip mix ecto.create
+  - dip mix setup
